@@ -2,274 +2,291 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Card Clash</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- =========================
-       TELA DE LOGIN
-  ========================== -->
-  <section id="login-screen" class="screen active">
-  <div class="screen-box">
-    <h1>Card Clash</h1>
-    <p class="subtitle">Entre na sua conta</p>
-
-    <input type="text" id="login-username" placeholder="Usuário (só no cadastro)" />
-    <input type="email" id="login-email" placeholder="Email" />
-    <input type="password" id="login-password" placeholder="Senha" />
-
-    <div class="start-actions">
-      <button id="login-btn" class="big-btn">Login</button>
-      <button id="register-btn" class="big-btn secondary">Cadastrar</button>
-    </div>
-  </div>
-</section>
 
   <!-- =========================
-       TELA INICIAL
+       MENU INICIAL
   ========================== -->
-  <section id="start-screen" class="screen hidden">
-    <div class="screen-box">
-      <h1>Card Clash</h1>
-      <p class="subtitle">Monte sua coleção, faça rolls e entre na batalha.</p>
+  <main class="menu-wrapper screen active" id="start-screen">
+    <section class="menu-card">
+      <h1 class="menu-title">Card Clash</h1>
+      <p class="menu-subtitle">Monte seu deck, abra rolls e entre na batalha.</p>
 
-      <div class="player-session-box">
-  <p class="subtitle">Jogando como: <strong id="player-nickname">Visitante</strong></p>
-  <div class="start-actions">
-    <button id="logout-btn" class="big-btn secondary">Sair</button>
-    <button id="switch-account-btn" class="big-btn secondary">Entrar em outra conta</button>
-  </div>
-</div>
+      <p class="player-line">
+        Jogando como: <span id="player-nickname">Carregando...</span>
+      </p>
 
-      <div class="start-actions">
-        <button id="open-deck-builder" class="big-btn secondary">Montar Deck</button>
-        <button id="start-game-btn" class="big-btn">Entrar no jogo</button>
-        <button id="open-roll-btn" class="big-btn secondary">Abrir roll</button>
+      <div class="menu-actions top-actions">
+        <button id="logout-btn" class="menu-btn red">Sair</button>
+        <button id="switch-account-btn" class="menu-btn purple">Trocar conta</button>
       </div>
-    </div>
-  </section>
+
+      <div class="menu-actions bottom-actions">
+        <button id="open-deck-builder" class="menu-btn purple">Montar Deck</button>
+        <button id="start-game-btn" class="menu-btn blue">Entrar no jogo</button>
+        <button id="open-roll-btn" class="menu-btn purple">Abrir roll</button>
+      </div>
+    </section>
+  </main>
 
   <!-- =========================
-       TELA DE DECK
+       DECK BUILDER
   ========================== -->
   <section id="deck-screen" class="screen hidden">
-    <div class="deck-builder-container">
-      <div class="deck-builder-top">
-        <h2>Montar Deck</h2>
+    <div class="page-shell">
+      <div class="page-header">
+        <h2>Deck Builder</h2>
+        <button id="back-to-menu-deck">Voltar</button>
+      </div>
 
-        <div class="deck-manager">
-          <select id="deck-select"></select>
-          <input type="text" id="deck-name-input" placeholder="Nome do deck" />
-          <button id="new-deck-btn">Novo Deck</button>
-          <button id="delete-deck-btn">Excluir Deck</button>
-        </div>
+      <div class="deck-builder-topbar">
+        <select id="deck-select"></select>
+        <input type="text" id="deck-name-input" placeholder="Nome do deck" />
+        <input type="text" id="deck-search" placeholder="Buscar carta" />
 
-        <select id="deck-filter-owned">
-          <option value="owned">Minhas cartas</option>
-          <option value="all">Todas as cartas</option>
+        <select id="deck-filter-rarity">
+          <option value="all">Todas raridades</option>
+          <option value="Básico">Básico</option>
+          <option value="Comum">Comum</option>
+          <option value="Especial">Especial</option>
+          <option value="Extraordinário">Extraordinário</option>
+          <option value="Elite">Elite</option>
         </select>
 
-        <div class="deck-builder-filters">
-          <input type="text" id="deck-search" placeholder="Buscar carta..." />
+        <select id="deck-filter-type">
+          <option value="all">Todos tipos</option>
+          <option value="Pusher">Pusher</option>
+          <option value="Juggernaut">Juggernaut</option>
+          <option value="Equalizer">Equalizer</option>
+          <option value="Effect">Effect</option>
+        </select>
 
-          <select id="deck-filter-rarity">
-            <option value="all">Todas raridades</option>
-            <option value="Básico">Básico</option>
-            <option value="Basico">Basico</option>
-            <option value="Comum">Comum</option>
-            <option value="Especial">Especial</option>
-            <option value="Extraordinário">Extraordinário</option>
-            <option value="Elite">Elite</option>
-          </select>
-
-          <select id="deck-filter-type">
-            <option value="all">Todos tipos</option>
-            <option value="Pusher">Pusher</option>
-            <option value="Juggernaut">Juggernaut</option>
-            <option value="Equalizer">Equalizer</option>
-            <option value="Effect">Effect</option>
-          </select>
-        </div>
+        <select id="deck-filter-owned">
+          <option value="owned">Só obtidas</option>
+          <option value="all">Todas</option>
+        </select>
       </div>
+
+      <p class="deck-count-line">Cartas no deck: <span id="deck-count">0</span>/20</p>
 
       <div class="deck-builder-layout">
-        <div class="builder-library-panel">
-          <h3>Sua Coleção</h3>
-          <div id="collection-cards" class="builder-grid"></div>
+        <div class="panel-block">
+          <h3>Coleção</h3>
+          <div id="collection-cards"></div>
         </div>
 
-        <div class="builder-deck-panel">
-          <div class="deck-panel-header">
-            <h3>Meu Deck</h3>
-            <span id="deck-count">0/20</span>
-          </div>
-
-          <div id="deck-cards" class="builder-deck-list"></div>
-
-          <div class="deck-builder-buttons">
-            <button id="save-deck-btn">Salvar Deck</button>
-            <button id="auto-build-btn">Auto Deck</button>
-            <button id="clear-deck-btn">Limpar Deck</button>
-            <button id="back-to-menu-deck">Voltar</button>
-          </div>
+        <div class="panel-block">
+          <h3>Deck</h3>
+          <div id="deck-cards"></div>
         </div>
+      </div>
+
+      <div class="deck-builder-actions">
+        <button id="new-deck-btn">Novo deck</button>
+        <button id="delete-deck-btn">Excluir deck</button>
+        <button id="auto-build-btn">Auto montar</button>
+        <button id="clear-deck-btn">Limpar deck</button>
+        <button id="save-deck-btn">Salvar deck</button>
       </div>
     </div>
   </section>
 
   <!-- =========================
-       TELA DE ROLL
+       ROLL / LOJA
   ========================== -->
   <section id="roll-screen" class="screen hidden">
-    <div class="screen-box roll-box">
-      <h2>Roll de Cartas</h2>
-      <p class="subtitle">Gire para conseguir novas cartas para sua coleção.</p>
-      <p id="rolls-left" class="subtitle">Rolls restantes: 30</p>
-
-      <div id="roll-result-card">
-        <div class="roll-placeholder">Sua carta aparecerá aqui</div>
+    <div class="page-shell">
+      <div class="page-header">
+        <h2>Loja / Roll</h2>
+        <button id="back-to-menu-btn">Voltar</button>
       </div>
 
-      <div class="roll-actions">
-        <button id="roll-once-btn" class="big-btn">Girar 1x</button>
-        <button id="roll-ten-btn" class="big-btn secondary">Girar 10x</button>
-        <button id="back-to-menu-btn" class="big-btn danger">Voltar</button>
+      <div class="roll-topbar">
+        <div id="rolls-left">Rolls restantes: 0</div>
+
+        <div class="roll-actions">
+          <button onclick="unlockAllForTest()">Liberar todas as cartas</button>
+          <button id="roll-once-btn">Abrir 1</button>
+          <button id="roll-ten-btn">Abrir 10</button>
+        </div>
       </div>
 
-      <div class="collection-preview">
-        <h3>Sua coleção</h3>
-        <div id="collection-preview-list" class="collection-list"></div>
+      <div class="roll-layout">
+        <div class="panel-block">
+          <h3>Última carta</h3>
+          <div id="roll-result-card"></div>
+        </div>
+
+        <div class="panel-block">
+          <h3>Prévia da coleção</h3>
+          <div id="collection-preview-list"></div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- =========================
-       TELA DO JOGO
+       JOGO
   ========================== -->
   <section id="game-screen" class="screen hidden">
-    <div id="topbar">
-      <div class="hudbox">
-        <div id="turn-display">Turno: 1</div>
-        <div class="label">Inimigo ❤️</div>
-        <div class="bar">
-          <div id="enemy-life-bar" class="fill red"></div>
-        </div>
-        <div id="enemy-life-text" class="value">4</div>
-      </div>
-
-      <div id="graveyard-bar">
-        <button id="open-player-grave">
-          ☠ Cemitério (Você)
-          <span id="graveyard-player-count">0</span>
-        </button>
-
-        <button id="open-enemy-grave">
-          ☠ Cemitério (Inimigo)
-          <span id="graveyard-enemy-count">0</span>
-        </button>
-      </div>
-
-      <button id="surrender-btn" class="danger">Surrender</button>
-      <button id="end-turn-btn">Passar turno</button>
-
-      <div class="hudbox">
-        <div class="label">Você ❤️</div>
-        <div class="bar">
-          <div id="player-life-bar" class="fill red"></div>
-        </div>
-        <div id="player-life-text" class="value">4</div>
-
-        <div class="mana">
-          <span class="label">PE</span>
-          <span id="mana-text" class="value">1 / 1</span>
-        </div>
-
-        <div class="bar">
-          <div id="mana-fill" class="fill blue"></div>
+    <div class="page-shell">
+      <div class="page-header">
+        <h2>Campo de batalha</h2>
+        <div class="game-top-actions">
+          <button id="end-turn-btn">Passar Turno</button>
+          <button id="surrender-btn">Render-se</button>
         </div>
       </div>
-    </div>
 
-    <div id="board4">
-      <div class="zone" id="bancoPlayer">
-        <h3>Banco (Você)</h3>
-        <div class="card-zone"></div>
+      <div class="hud-row">
+        <div id="turn-display">Turno: 0</div>
+        <div id="game-warning"></div>
       </div>
 
-      <div class="zone" id="campo1">
-        <h3>Campo 1</h3>
-        <div class="card-zone"></div>
+      <div class="hud-row">
+        <div id="mana-ui">
+          <div id="mana-text">PE: 0 / 0</div>
+          <div class="bar">
+            <div id="mana-fill"></div>
+          </div>
+        </div>
       </div>
 
-      <div class="zone" id="campo2">
-        <h3>Campo 2</h3>
-        <div class="card-zone"></div>
+      <div class="life-row">
+        <div class="life-box">
+          <span>Vida inimiga</span>
+          <span id="enemy-life-text">4</span>
+          <div class="bar">
+            <div id="enemy-life-bar"></div>
+          </div>
+        </div>
+
+        <div class="life-box">
+          <span>Sua vida</span>
+          <span id="player-life-text">4</span>
+          <div class="bar">
+            <div id="player-life-bar"></div>
+          </div>
+        </div>
       </div>
 
-      <div class="zone" id="bancoEnemy">
-        <h3>Banco (Inimigo)</h3>
-        <div class="card-zone"></div>
+      <div class="grave-counter-row">
+        <button id="open-player-grave">Cemitério jogador (<span id="graveyard-player-count">0</span>)</button>
+        <button id="open-enemy-grave">Cemitério inimigo (<span id="graveyard-enemy-count">0</span>)</button>
+      </div>
+
+      <div class="hand-panel">
+        <h3>Sua mão</h3>
+        <div id="player-hand"></div>
+      </div>
+
+      <div class="board-panel">
+        <h3>Campo</h3>
+        <div id="board">
+  <div id="bancoEnemy" class="board-row board-row-bench enemy">
+    <div class="zone-capacity">6 cartas</div>
+    <div class="zone-label">Banco Inimigo</div>
+    <div class="card-zone"></div>
+  </div>
+
+  <div id="campo2" class="board-row board-row-field enemy">
+    <div class="zone-capacity">4 cartas</div>
+    <div class="zone-label">Campo Inimigo</div>
+    <div class="card-zone"></div>
+  </div>
+
+  <div class="board-divider"></div>
+
+  <div id="campo1" class="board-row board-row-field player">
+    <div class="zone-capacity">4 cartas</div>
+    <div class="zone-label">Campo Jogador</div>
+    <div class="card-zone"></div>
+  </div>
+
+  <div id="bancoPlayer" class="board-row board-row-bench player">
+    <div class="zone-capacity">6 cartas</div>
+    <div class="zone-label">Banco Jogador</div>
+    <div class="card-zone"></div>
+  </div>
+</div>
       </div>
     </div>
-
-    <div id="hand">
-      <div class="hand-title">Sua Mão (duplo clique para jogar no banco)</div>
-      <div id="player-hand" class="hand-cards"></div>
-    </div>
-
-    <div id="card-menu">
-      <button id="move-btn">Mover</button>
-      <button id="attack-btn">Atacar</button>
-      <button id="effect-btn">Ver efeito</button>
-      <button id="cancel-btn">Cancelar</button>
-    </div>
-
-    <div id="game-warning"></div>
   </section>
 
+  
   <!-- =========================
-       MODAL INFO DA CARTA
+       MENU DE AÇÃO DA CARTA
   ========================== -->
-  <div id="card-info-modal" class="hidden">
-    <div class="card-info-box">
-      <h3 id="card-info-title"></h3>
-      <pre id="card-info-text"></pre>
-      <button id="close-card-info">Fechar</button>
-    </div>
+  <div id="hand-card-menu" class="hidden">
+  <button id="hand-play-btn">Jogar</button>
+  <button id="hand-info-btn">Info</button>
+  <button id="hand-cancel-btn">Cancelar</button>
+</div>
+
+<div id="card-menu" class="hidden">
+  <button id="info-btn">Info</button>
+  <button id="move-btn">Mover</button>
+  <button id="attack-btn">Atacar</button>
+  <button id="cancel-btn">Cancelar</button>
+</div>
+
+  <!-- =========================
+       MODAL ROLL 10
+  ========================== -->
+  <div id="roll10-modal" class="hidden">
+    <button id="close-roll10-modal">Fechar</button>
+    <div id="roll10-cards"></div>
   </div>
 
   <!-- =========================
        MODAL CEMITÉRIO
   ========================== -->
-  <div id="graveyard-modal" class="hidden">
-    <div class="graveyard-box">
-      <h2 id="graveyard-title">Cemitério</h2>
-      <div id="graveyard-cards"></div>
-      <button id="close-graveyard">Fechar</button>
-    </div>
+  <div class="graveyard-container">
+  <div>
+    <h3>Seu Cemitério</h3>
+    <div id="graveyard-player"></div>
   </div>
 
-  <!-- =========================
-       MENU DE AÇÃO DO DECK
-  ========================== -->
-  <div id="deck-action-menu" class="deck-action-menu hidden">
-    <button id="deck-action-add">Colocar no deck</button>
-    <button id="deck-action-info">Ver efeito</button>
-  </div>
-
-  <div id="roll10-modal" class="hidden">
-  <div class="roll10-box">
-    <h2>Cartas obtidas</h2>
-    <div id="roll10-cards"></div>
-    <button id="close-roll10-modal">Fechar</button>
+  <div>
+    <h3>Cemitério Inimigo</h3>
+    <div id="graveyard-enemy"></div>
   </div>
 </div>
 
-<script src="cards.js"></script>
-<script src="effects.js"></script>
-<script src="api.js"></script>
-<script src="script.js"></script>
+  
+
+  <div id="deck-action-menu" class="deck-action-menu hidden">
+  <button id="deck-action-add">➕ Colocar no deck</button>
+  <button id="deck-action-info">📖 Ver informações</button>
+</div>
+
+<div id="card-info-modal" class="card-info-modal hidden">
+  <div class="card-info-box">
+    <button id="close-card-info" class="close-info-btn">✖</button>
+    <div id="card-info-content"></div>
+  </div>
+</div>
+
+<div id="graveyard-modal" class="hidden">
+  <div class="page-header">
+    <h3 id="graveyard-title">Cemiterio</h3>
+    <button id="close-graveyard">Fechar</button>
+  </div>
+  <div id="graveyard-cards"></div>
+</div>
+
+  <!-- =========================
+       SCRIPTS
+  ========================== -->
+  <script src="cards.js?v=20260413a"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="script.js?v=20260413a"></script>
+  <script src="effects.js?v=20260413a"></script>
+  <script src="api.js?v=20260413a"></script>
+  
 </body>
 </html>

@@ -1588,7 +1588,7 @@ const EFFECT_SPECIAL = {
     EFFECT_UTILS.warn(`🧠 Topo do deck: ${topCard.name}`);
   },
 
-  dandelionShield() {
+  dandelionEffect(ctx) {
     const target = EFFECT_UTILS.getFirstPlayerUnit();
 
     if (!target?.card) {

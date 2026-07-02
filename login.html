@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Card Clash - Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <main class="auth-container">
+    <div class="auth-card">
+
+      <h1>Card Clash</h1>
+      <p id="message">Faça login ou crie uma conta</p>
+
+      <div class="tabs">
+        <button id="show-login" class="tab active">Login</button>
+        <button id="show-register" class="tab">Cadastro</button>
+      </div>
+
+      <section id="login-section">
+        <input type="email" id="login-email" placeholder="Email" />
+        <input type="password" id="login-password" placeholder="Senha" />
+        <button id="login-btn" class="blue">Entrar</button>
+      </section>
+
+      <section id="register-section" class="hidden">
+        <input type="text" id="register-username" placeholder="Usuário" />
+        <input type="email" id="register-email" placeholder="Email" />
+        <input type="password" id="register-password" placeholder="Senha" />
+        <button id="register-btn" class="purple">Cadastrar</button>
+      </section>
+
+      <hr class="auth-divider" />
+
+      <section class="auth-debug">
+        <button id="me-btn" class="purple">Testar /me</button>
+        <button id="logout-btn" class="red">Limpar sessão</button>
+      </section>
+
+      <pre id="output"></pre>
+
+    </div>
+  </main>
+
+  <script src="api.js?v=20260413a"></script>
+  <script src="script-login.js?v=20260413a"></script>
+</body>
+</html>
