@@ -52,8 +52,21 @@ socket.on("match_found", (match) => {
   initGame();
   showScreen("game-screen");
 
-  const deckAtual = getCurrentDeck();
+  // Pega o deck atual do jogador
+  let deckAtual = getCurrentDeck();
 
+  // CORREÇÃO: Se o deck estiver vazio ou não existir, o jogo cria um deck padrão de teste
+  // com as cartas iniciais (ex: P001, P002, P003...) para o jogo não quebrar online.
+  if (!deckAtual || !Array.isArray(deckAtual) || deckAtual.length === 0) {
+    console.warn("Nenhum deck selecionado ou deck vazio! Usando deck padrão de teste.");
+    
+    // Altere esses IDs ("P001", "P002", etc.) pelos IDs reais que você tem no seu CARD_DB
+    deckAtual = ["P001", "P001", "P002", "P002", "P003", "P003", "P004", "P004", "P005", "P005"];
+    
+    alert("Aviso: Você não selecionou um deck ativo. Iniciando com um deck padrão de teste!");
+  }
+
+  // Envia o deck corrigido para o servidor
   socket.emit("set_match_deck", {
     matchId: match.id,
     deck: deckAtual
