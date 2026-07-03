@@ -225,32 +225,22 @@ function initGame() {
 
     zoneEl.addEventListener("click", (e) => {
       console.log("CLICOU NA ZONA:", z);
-      console.log("actionMode:", actionMode);
-      console.log("selected:", selected);
-
-      // só bloqueia clique na carta se NÃO for ataque direto
-      if (e.target.closest(".card") && !(z === "bancoEnemy" && actionMode === "attack")) {
-        console.log("CLICK FINAL:", {
-          zona: z,
-          actionMode,
-          selected
-        });
-        return;
-      }
-
+      
+      // Se clicou na zona inimiga querendo atacar direto o banco
       if (z === "bancoEnemy" && selected && actionMode === "attack") {
         directAttackBancoEnemy(selected.zone, selected.index);
         actionMode = null;
         selected = null;
-        renderBoard();
+        hideCardMenu();
         return;
       }
 
+      // Se clicou na zona vazia querendo mover a carta para cá
       if (actionMode === "move" && selected) {
         tryMoveToZone(z);
         actionMode = null;
         selected = null;
-        renderBoard();
+        hideCardMenu();
         return;
       }
     });
@@ -621,16 +611,18 @@ function renderBoard() {
       el.addEventListener("click", (e) => {
         e.stopPropagation();
 
-        // se estiver esperando alvo de effect, usa a carta clicada como alvo
         if (waitingEffectTarget) {
           tryUseEffectOnTarget(zone, idx);
           return;
         }
 
+        // Verifica o dono da carta baseado no socket.id
         const isMyCard = obj.owner === socket.id;
         const isEnemyCard = obj.owner !== socket.id;
 
+        // SE FOR CARTA INIMIGA E EU ESTIVER ATACANDO:
         if (isEnemyCard && selected && actionMode === "attack") {
+          console.log(`Atacando unidade inimiga na zona ${zone}, index ${idx}`);
           attackUnit(selected.zone, selected.index, zone, idx);
           actionMode = null;
           selected = null;
@@ -638,12 +630,12 @@ function renderBoard() {
           return;
         }
 
+        // SE FOR MINHA CARTA: Abre o menu de opções
         if (isMyCard) {
           if (!isMyTurn()) {
             showWarning("Não é seu turno.");
             return;
           }
-
           showCardMenu(e.clientX, e.clientY, zone, idx);
         }
       });
@@ -773,6 +765,9 @@ if (cardInfoModal) {
 // =============================
 // MENU DA CARTA - BOTÕES
 // =============================
+// =============================
+// MENU DA CARTA - BOTÕES CORRIGIDOS
+// =============================
 if (btnCancel) {
   btnCancel.onclick = () => {
     actionMode = null;
@@ -787,7 +782,7 @@ if (btnMove) {
     if (!menuTarget) return;
 
     actionMode = "move";
-    selected = menuTarget;
+    selected = { ...menuTarget }; // Salva a carta de origem selecionada
     hideCardMenu();
     renderBoard();
 
@@ -800,47 +795,11 @@ if (btnAttack) {
     if (!menuTarget) return;
 
     actionMode = "attack";
-    selected = menuTarget;
+    selected = { ...menuTarget }; // Salva a carta atacante selecionada
     hideCardMenu();
     renderBoard();
 
-    showWarning("⚔ Clique em uma carta inimiga para atacar");
-  };
-}
-
-if (btnEffect) {
-  btnEffect.onclick = () => {
-    if (!menuTarget) return;
-
-    const zone = menuTarget.zone;
-    const index = menuTarget.index;
-    const unit = board[zone] && board[zone][index];
-
-    if (!unit || !unit.card) {
-      hideCardMenu();
-      return;
-    }
-
-    openDeckCardInfo(unit.card);
-    hideCardMenu();
-  };
-}
-
-if (btnInfo) {
-  btnInfo.onclick = () => {
-    if (!menuTarget) return;
-
-    const zone = menuTarget.zone;
-    const index = menuTarget.index;
-    const unit = board[zone] && board[zone][index];
-
-    if (!unit || !unit.card) {
-      hideCardMenu();
-      return;
-    }
-
-    openDeckCardInfo(unit.card);
-    hideCardMenu();
+    showWarning("⚔ Clique em uma carta inimiga ou no Banco Inimigo para atacar");
   };
 }
 
