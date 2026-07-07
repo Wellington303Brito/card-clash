@@ -140,11 +140,15 @@ const EFFECT_BASICS = {
   },
 
   blitz(ctx) {
-    const card = this._getCard(ctx);
+    const card = EFFECT_BASICS._getCard(ctx);
     if (!card) return;
     card.blitz = true;
-    // Se o seu motor usar estados de ação, garante que já pode atacar
-    if (ctx.state) {
+    
+    // Correção do escopo para evitar o erro do this.getState
+    if (ctx && typeof ctx.getState === "function") {
+      const s = ctx.getState(ctx);
+      if (s) s.canAttack = true;
+    } else if (ctx?.state) {
       ctx.state.canAttack = true;
       ctx.state.summonTurn = false;
     }
